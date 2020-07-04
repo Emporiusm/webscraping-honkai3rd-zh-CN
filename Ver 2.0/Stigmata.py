@@ -12,13 +12,19 @@ class StigmataSet:
         self.setability2    = setability2
         self.setability3    = setability3
 
-    def setability(self,pieces,ability):
+    def __setattr__(self,setability2,setability3):
+        setability.update(
+            {
+                2:setability2
+                3:setability3
+            }
+        )
 
-    def __setattr__
-        self.
-        __setattr__
-        (setability2,ability)
-
+    def __getattr__(self, attr): 
+         if attr in B.d: 
+             return B.d[attr] 
+         else: 
+             raise AttributeError(attr) 
 
     def getability(self,pieces:in
         setability = {
