@@ -2,37 +2,22 @@
 class StigmataSet:
     """Class for Stigmata Objects"""
 
-    setability={
-        2:None,
-        3:None
-    }
-
-    def __init__(self,name,setability2,setability3):
-        self.name           = name
-        self.setability2    = setability2
-        self.setability3    = setability3
+    def __init__(self,name,set2,set3):
+        self.name   = name
+        self.set2   = set2
+        self.set3   = set3
 
     def __setattr__(self,setability2,setability3):
-        setability.update(
+        self.setbility.update(
             {
-                2:setability2
+                2:setability2,
                 3:setability3
             }
         )
+        return print(setability)
 
-    def __getattr__(self, attr): 
-         if attr in B.d: 
-             return B.d[attr] 
-         else: 
-             raise AttributeError(attr) 
-
-    def getability(self,pieces:in
-        setability = {
-            1:None,
-            2:self.setability2,
-            3:self.setability3
-        }
-        return setability.get(pieces)
+    def __getattr__(self):
+        print(setability)
 
 class Stigmata(StigmataSet):
 
@@ -46,5 +31,8 @@ class Stigmata(StigmataSet):
         self.atk    = atk
         self.dfs    = dfs
         self.crt    = crt    
+
+# %%
+red = StigmataSet('霄雲紅')
 
 # %%
