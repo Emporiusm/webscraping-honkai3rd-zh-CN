@@ -22,21 +22,21 @@ class Valkyries:
     savestats(df_vstats)     - call function to save the dataframe              - output  Valkyrie.pkl      pkl
     loadstats(Valkyrie_pkl)  - call function to load local pickle file          - return  stats:            dataframe
     """
-
-    stats = pd.read_pickle('Valkyrie.pkl')
     
-    def __init__(self,name:str=None,rank:str=['B','A','S','SS','SSS']):
-        self.name = name
-        self.rank = rank
-
-    def __repr__(self,name):
+    def __init__(self,pkl=['/Valkyrie.pkl'],*url_part,pages):
+        self.pkl    = pkl
+        urls        = [url_part + str(page) for page in range(pages)]
+        htmls       = [urlopen(url).read() for url in urls]
+        self.stats  = [BeautifulSoup(html.decode('utf-8'),'html.parser') for html in htmls]
+        
+    def __repr__(self,*name):
         return '''This is an instance of the Valkyrie class for statistics filter by {!r} in the 'name' column.'''.format(self.name)
 
-    def refesh(self,url_part,pages):
-        urls        = [url_part + str(page) for page in pages]
+    def refresh_frame(self,url_part,pages):
+        urls        = [url_part + str(page) for page in range(pages)]
         htmls       = [urlopen(url).read() for url in urls]
-        souplist    = [BeautifulSoup(html.decode('utf-8'),'html.parser') for html in htmls]
-        return      souplist
+        self.stats  = [BeautifulSoup(html.decode('utf-8'),'html.parser') for html in htmls]
+        return      self.stats
         
 
     
