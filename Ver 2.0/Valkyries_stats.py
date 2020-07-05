@@ -15,23 +15,45 @@ class Valkyries:
 
     <<list of available functions>>
 
-    loadweb(urls)            - call function to synchronize with the web        - return  souplist:       list
-    savesoup(souplist)       - call function to save the list from loadweb      - output  souplist.pkl    pkl
-    loadsoup(souplist_pkl)   - call function to load local pickle file          - return  souplist:       list
-    soup2stats(souplist)     - call function to parse the souplist              - return  df_vstat:       dataframe
-    savestats(df_vstats)     - call function to save the dataframe              - output  Valkyrie.pkl    pkl
-    loadstats(Valkyrie_pkl)  - call function to load local pickle file          - return  df_vstats:      dataframe
+    loadweb(urls)            - call function to synchronize with the web        - return  souplist:         list
+    savesoup(souplist)       - call function to save the list from loadweb      - output  souplist.pkl      pkl
+    loadsoup(souplist_pkl)   - call function to load local pickle file          - return  souplist:         list
+    soup2stats(souplist)     - call function to parse the souplist              - return  df_vstat:         dataframe
+    savestats(df_vstats)     - call function to save the dataframe              - output  Valkyrie.pkl      pkl
+    loadstats(Valkyrie_pkl)  - call function to load local pickle file          - return  stats:            dataframe
     """
-#%% 
-    def __init__(self,url_parts,pages):
-        self.name       = name
-        self.url_parts  = url_parts
-        self.pages      = pages
 
+    stats = pd.read_pickle('Valkyrie.pkl')
+    
+    def __init__(self,name:str=None,rank:str=['B','A','S','SS','SSS']):
+        self.name = name
+        self.rank = rank
+
+    def __repr__(self,name):
+        return '''This is an instance of the Valkyrie class for statistics filter by {!r} in the 'name' column.'''.format(self.name)
+
+    def refesh(self,url_part,pages):
+        urls        = [url_part + str(page) for page in pages]
+        htmls       = [urlopen(url).read() for url in urls]
+        souplist    = [BeautifulSoup(html.decode('utf-8'),'html.parser') for html in htmls]
+        return      souplist
+        
+
+    
+#%%
     class Refresh(Valkyries):
 
         def __init__(self,url_parts,pages):
-            super.__
+            super.__init___()
+
+        def getstats(self,name=None,rank=None):
+            if name == None:
+                df = pd.DataFrame(rank in stats['rank'])
+            elif rank == None:
+                df = pd.DataFrame(name in stats['name'])
+            else:
+                df = pd.DataFrame(rank in stats['rank'] and name in stats['name'])
+
 
     def loadweb(self):
     urls        = [url_part + str(page) for page in pages]
