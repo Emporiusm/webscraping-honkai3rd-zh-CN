@@ -27,10 +27,43 @@ class Valkyrie:
 
     url_prefix = 'https://3rdguide.com/web/valk/detail?id='
 
-    def __init__(self,page):
-        self._source    = 'https://3rdguide.com/web/valk/detail?id=' + str(page)
-        html            = urlopen(self._source).read()
-        soup            = BeautifulSoup(html.decode('utf-8'),'html.parser')
+    def __init__(self,page,soup=None):
+        self.page   = 'https://3rdguide.com/web/valk/detail?id=' + str(page)
+        html        = urlopen(self.page).read()
+        self.soup   = BeautifulSoup(html.decode('utf-8'),'html.parser')
+
+    def getskills(self):
+        df = pd.DataFrame()
+        sk        = [sk.get_text()      for sk      in self.soup.findAll('p',    class_='item1')     ]
+        skname    = [skname.get_text()  for skname  in self.soup.findAll('p',    class_='item2')     ]
+        skdesc    = [skdesc.get_text()  for skdesc  in self.soup.findAll('p',    class_='msg')       ]
+        sk1name   = [sk1name.get_text() for sk1name in self.soup.findAll('p',    class_='item1_1')   ]
+        sk1desc   = [sk1desc.get_text() for sk1desc in self.soup.findAll('p',    class_='item1_2')   ]
+        sk1stat   = [sk1stat.get_text() for sk1stat in self.soup.findAll('div',  class_='item3')     ]
+        sk2name   = [sk2name.get_text() for sk2name in self.soup.findAll('p',    class_='item1_1')   ]
+        sk2desc   = [sk2desc.get_text() for sk2desc in self.soup.findAll('p',    class_='item1_2')   ]
+        sk2stat   = [sk2stat.get_text() for sk2stat in self.soup.findAll('div',  class_='item3')     ]
+        sk3name   = [sk3name.get_text() for sk3name in self.soup.findAll('p',    class_='item1_1')   ]
+        sk3desc   = [sk3desc.get_text() for sk3desc in self.soup.findAll('p',    class_='item1_2')   ]
+        sk3stat   = [sk3stat.get_text() for sk3stat in self.soup.findAll('div',  class_='item3')     ]
+        skill = pd.DataFrame(
+            [
+                sk,
+                skname,
+                skdesc,
+                sk1name,
+                sk1desc,
+                sk1stat,
+                sk2name,
+                sk2desc,
+                sk2stat,
+                sk3name,
+                sk3desc,
+                sk3stat
+            ],
+        ).transpose().set_index(0)
+        return skill
+        self.skills = skills
 
 
 # %%
@@ -63,18 +96,18 @@ def loadsoup(souplist_pkl):
 def soup2skills(souplist):
     df = pd.DataFrame()
     for soup in souplist:
-        sk        = [sk.get_text()      for sk      in soup.findAll('p',    class_='item1')     ]
-        skname    = [skname.get_text()  for skname  in soup.findAll('p',    class_='item2')     ]
-        skdesc    = [skdesc.get_text()  for skdesc  in soup.findAll('p',    class_='msg')       ]
-        sk1name   = [sk1name.get_text() for sk1name in soup.findAll('p',    class_='item1_1')   ]
-        sk1desc   = [sk1desc.get_text() for sk1desc in soup.findAll('p',    class_='item1_2')   ]
-        sk1stat   = [sk1stat.get_text() for sk1stat in soup.findAll('div',  class_='item3')     ]
-        sk2name   = [sk2name.get_text() for sk2name in soup.findAll('p',    class_='item1_1')   ]
-        sk2desc   = [sk2desc.get_text() for sk2desc in soup.findAll('p',    class_='item1_2')   ]
-        sk2stat   = [sk2stat.get_text() for sk2stat in soup.findAll('div',  class_='item3')     ]
-        sk3name   = [sk3name.get_text() for sk3name in soup.findAll('p',    class_='item1_1')   ]
-        sk3desc   = [sk3desc.get_text() for sk3desc in soup.findAll('p',    class_='item1_2')   ]
-        sk3stat   = [sk3stat.get_text() for sk3stat in soup.findAll('div',  class_='item3')     ]
+        sk        = [sk.get_text()      for sk      in self.soup.findAll('p',    class_='item1')     ]
+        skname    = [skname.get_text()  for skname  in self.soup.findAll('p',    class_='item2')     ]
+        skdesc    = [skdesc.get_text()  for skdesc  in self.soup.findAll('p',    class_='msg')       ]
+        sk1name   = [sk1name.get_text() for sk1name in self.soup.findAll('p',    class_='item1_1')   ]
+        sk1desc   = [sk1desc.get_text() for sk1desc in self.soup.findAll('p',    class_='item1_2')   ]
+        sk1stat   = [sk1stat.get_text() for sk1stat in self.soup.findAll('div',  class_='item3')     ]
+        sk2name   = [sk2name.get_text() for sk2name in self.soup.findAll('p',    class_='item1_1')   ]
+        sk2desc   = [sk2desc.get_text() for sk2desc in self.soup.findAll('p',    class_='item1_2')   ]
+        sk2stat   = [sk2stat.get_text() for sk2stat in self.soup.findAll('div',  class_='item3')     ]
+        sk3name   = [sk3name.get_text() for sk3name in self.soup.findAll('p',    class_='item1_1')   ]
+        sk3desc   = [sk3desc.get_text() for sk3desc in self.soup.findAll('p',    class_='item1_2')   ]
+        sk3stat   = [sk3stat.get_text() for sk3stat in self.soup.findAll('div',  class_='item3')     ]
         df = pd.append(
             [
                 sk,
