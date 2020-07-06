@@ -1,9 +1,0 @@
-=ARRAY_CONSTRAIN(
-    if(
-        istext(C2:C),
-        regexextract(C2:C,".位$|.件套"),
-        iferror(1/0)
-    ),
-    counta(H:H),
-    1
-)
