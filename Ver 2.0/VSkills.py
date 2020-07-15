@@ -114,7 +114,7 @@ def soup2skills(souplist):
         sk3name   = [sk3name.get_text() for sk3name in soup.findAll('p',    class_='item1_1')   ]
         sk3desc   = [sk3desc.get_text() for sk3desc in soup.findAll('p',    class_='item1_2')   ]
         sk3stat   = [sk3stat.get_text() for sk3stat in soup.findAll('div',  class_='item3')     ]
-        df = pd.append(
+        df_vskills = df_vskills.append(
             [
                 sk,
                 skname,
