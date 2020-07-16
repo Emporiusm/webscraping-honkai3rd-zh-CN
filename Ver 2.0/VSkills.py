@@ -57,48 +57,36 @@ def loadsoup(souplist_pkl):
 def soup2skills(souplist):
     df_vskills = pd.DataFrame()
     for soup in souplist:
-        sk        = [sk.get_text()      for sk      in soup.findAll('p',    class_='item1')     ]
-        skname    = [skname.get_text()  for skname  in soup.findAll('p',    class_='item2')     ]
-        skdesc    = [skdesc.get_text()  for skdesc  in soup.findAll('p',    class_='msg')       ]
-        sk1name   = [sk1name.get_text() for sk1name in soup.findAll('p',    class_='item1_1')   ]
-        sk1desc   = [sk1desc.get_text() for sk1desc in soup.findAll('p',    class_='item1_2')   ]
-        sk1stat   = [sk1stat.get_text() for sk1stat in soup.findAll('div',  class_='item3')     ]
-        sk2name   = [sk2name.get_text() for sk2name in soup.findAll('p',    class_='item1_1')   ]
-        sk2desc   = [sk2desc.get_text() for sk2desc in soup.findAll('p',    class_='item1_2')   ]
-        sk2stat   = [sk2stat.get_text() for sk2stat in soup.findAll('div',  class_='item3')     ]
-        sk3name   = [sk3name.get_text() for sk3name in soup.findAll('p',    class_='item1_1')   ]
-        sk3desc   = [sk3desc.get_text() for sk3desc in soup.findAll('p',    class_='item1_2')   ]
-        sk3stat   = [sk3stat.get_text() for sk3stat in soup.findAll('div',  class_='item3')     ]
-        df_vskills = pd.DataFrame(
-            [
-                sk,
-                skname,
-                skdesc,
-                sk1name,
-                sk1desc,
-                sk1stat,
-                sk2name,
-                sk2desc,
-                sk2stat,
-                sk3name,
-                sk3desc,
-                sk3stat
-            ],
-            index=[
-                'sk',
-                'skname',
-                'skdesc',
-                'sk1name',
-                'sk1desc',
-                'sk1stat',
-                'sk2name',
-                'sk2desc',
-                'sk2stat',
-                'sk3name',
-                'sk3desc',
-                'sk3stat'
-            ],
-        ).transpose().set_index(0)
+        sk      = [sk.get_text()      for sk      in soup.findAll('p',    class_='item1')     ]
+        skname  = [skname.get_text()  for skname  in soup.findAll('p',    class_='item2')     ]
+        skdesc  = [skdesc.get_text()  for skdesc  in soup.findAll('p',    class_='msg')       ]
+        sk1name = [sk1name.get_text() for sk1name in soup.findAll('p',    class_='item1_1')   ]
+        sk1desc = [sk1desc.get_text() for sk1desc in soup.findAll('p',    class_='item1_2')   ]
+        sk1stat = [sk1stat.get_text() for sk1stat in soup.findAll('div',  class_='item3')     ]
+        sk2name = [sk2name.get_text() for sk2name in soup.findAll('p',    class_='item1_1')   ]
+        sk2desc = [sk2desc.get_text() for sk2desc in soup.findAll('p',    class_='item1_2')   ]
+        sk2stat = [sk2stat.get_text() for sk2stat in soup.findAll('div',  class_='item3')     ]
+        sk3name = [sk3name.get_text() for sk3name in soup.findAll('p',    class_='item1_1')   ]
+        sk3desc = [sk3desc.get_text() for sk3desc in soup.findAll('p',    class_='item1_2')   ]
+        sk3stat = [sk3stat.get_text() for sk3stat in soup.findAll('div',  class_='item3')     ]
+        dic     = {}
+        dic.update(
+            {
+                'sk':       sk,
+                'skname':   skname,
+                'skdesc':   skdesc,
+                'sk1name':  sk1name,
+                'sk1desc':  sk1desc,
+                'sk1stat':  sk1stat,
+                'sk2name':  sk2name,
+                'sk2desc':  sk2desc,
+                'sk2stat':  sk2stat,
+                'sk3name':  sk3name,
+                'sk3desc':  sk3desc,
+                'sk3stat':  sk3stat
+            }
+        )
+        df_vskills = pd.DataFrame.from_dict(dic,orient='columns',dtype=str)
     return df_vskills
 
 
