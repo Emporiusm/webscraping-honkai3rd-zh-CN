@@ -152,14 +152,9 @@ def loadstats(Valkyrie_pkl):
 def refreshall(urls):
     print('Refreshing Web Content...')
     souplist = loadweb(urls)
-    df_vskills = soup2skills(souplist)
-    return df_vskills.to_excel('valkyrie_skills.xlsx')
-    return savesoup(souplist)
-    return savestats(df_vstats)
-    return print('Task Completed!')
+    soup2skills(souplist).to_excel('valkyrie.skills.xlsx')
+    savesoup(souplist)
+    savestats(df_vstats)
+    print('Task Completed!')
 
 #%%
-vsk = refreshall(urls)
-vsk
-
-# %%
