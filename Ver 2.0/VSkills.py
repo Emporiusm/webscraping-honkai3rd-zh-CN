@@ -15,58 +15,13 @@ import numpy as np
 
 
 # %%
-pages       = range(100)
+pages       = range(2)
 url_part    = 'https://3rdguide.com/web/valk/detail?id='
 urls        = [url_part + str(page) for page in pages]
 souplist    = []
 df_vstats   = pd.DataFrame()
 df          = pd.DataFrame()
 path        = os.path.abspath(os.getcwd())
-
-#%%
-class Valkyrie:
-    ''' Webscraping 3rdguide.com creating an object per Valkyrie page '''
-
-    url_prefix = 'https://3rdguide.com/web/valk/detail?id='
-
-    def __init__(self,page,soup=None):
-        self.page   = 'https://3rdguide.com/web/valk/detail?id=' + str(page)
-        html        = urlopen(self.page).read()
-        soup   = BeautifulSoup(html.decode('utf-8'),'html.parser')
-
-    def getskills(self):
-        df = pd.DataFrame()
-        sk        = [sk.get_text()      for sk      in self.soup.findAll('p',    class_='item1')     ]
-        skname    = [skname.get_text()  for skname  in self.soup.findAll('p',    class_='item2')     ]
-        skdesc    = [skdesc.get_text()  for skdesc  in self.soup.findAll('p',    class_='msg')       ]
-        sk1name   = [sk1name.get_text() for sk1name in self.soup.findAll('p',    class_='item1_1')   ]
-        sk1desc   = [sk1desc.get_text() for sk1desc in self.soup.findAll('p',    class_='item1_2')   ]
-        sk1stat   = [sk1stat.get_text() for sk1stat in self.soup.findAll('div',  class_='item3')     ]
-        sk2name   = [sk2name.get_text() for sk2name in self.soup.findAll('p',    class_='item1_1')   ]
-        sk2desc   = [sk2desc.get_text() for sk2desc in self.soup.findAll('p',    class_='item1_2')   ]
-        sk2stat   = [sk2stat.get_text() for sk2stat in self.soup.findAll('div',  class_='item3')     ]
-        sk3name   = [sk3name.get_text() for sk3name in self.soup.findAll('p',    class_='item1_1')   ]
-        sk3desc   = [sk3desc.get_text() for sk3desc in self.soup.findAll('p',    class_='item1_2')   ]
-        sk3stat   = [sk3stat.get_text() for sk3stat in self.soup.findAll('div',  class_='item3')     ]
-        skill = pd.DataFrame(
-            [
-                sk,
-                skname,
-                skdesc,
-                sk1name,
-                sk1desc,
-                sk1stat,
-                sk2name,
-                sk2desc,
-                sk2stat,
-                sk3name,
-                sk3desc,
-                sk3stat
-            ],
-        ).transpose().set_index(0)
-        return skill
-        self.skills = skills
-
 
 # %%
 def loadweb(urls):
@@ -114,7 +69,7 @@ def soup2skills(souplist):
         sk3name   = [sk3name.get_text() for sk3name in soup.findAll('p',    class_='item1_1')   ]
         sk3desc   = [sk3desc.get_text() for sk3desc in soup.findAll('p',    class_='item1_2')   ]
         sk3stat   = [sk3stat.get_text() for sk3stat in soup.findAll('div',  class_='item3')     ]
-        df_vskills = df_vskills.append(
+        df_vskills = pd.DataFrame(
             [
                 sk,
                 skname,
@@ -128,8 +83,22 @@ def soup2skills(souplist):
                 sk3name,
                 sk3desc,
                 sk3stat
-            ]
-        )
+            ],
+            index=[
+                'sk',
+                'skname',
+                'skdesc',
+                'sk1name',
+                'sk1desc',
+                'sk1stat',
+                'sk2name',
+                'sk2desc',
+                'sk2stat',
+                'sk3name',
+                'sk3desc',
+                'sk3stat'
+            ],
+        ).transpose().set_index(0)
     return df_vskills
 
 
@@ -152,9 +121,13 @@ def loadstats(Valkyrie_pkl):
 def refreshall(urls):
     print('Refreshing Web Content...')
     souplist = loadweb(urls)
-    soup2skills(souplist).to_excel('valkyrie.skills.xlsx')
+    soup2skills(souplist).to_excel('valkyrie_skills.xlsx')
     savesoup(souplist)
     savestats(df_vstats)
     print('Task Completed!')
 
 #%%
+refreshall(urls)
+
+
+# %%
