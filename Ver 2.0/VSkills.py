@@ -1,5 +1,7 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
+# -*- coding: UTF-8 -*-
+
 # %%
 from bs4 import BeautifulSoup
 import re

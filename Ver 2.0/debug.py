@@ -1,5 +1,6 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
+# -*- coding: UTF-8 -*-
 # %%
 from bs4 import BeautifulSoup
 import re
@@ -40,17 +41,32 @@ soup = loadweb(urls)
 
 #%%
 category = soup[0].findAll('p',class_='item1')
+cats = []
+for cat in category:
+    text = cat.get_text()
+    cats.append(text)
 lst = []
 for string in soup[0].stripped_strings:
     lst.append(string)
 
 #%%
+index = []
+print(cats)
+for cat in cats:
+    position = lst.index(cat)
+    index.append(position)
+
+# %%
+print(index)
+#%%
 dic = {}
-for cat in category:
-    dic.update({cat:lst.index(cat)})
-
-# %%
-pprin
-
-
-# %%
+for r in range(0,5):
+    dic.update(
+        {
+            lst[index[r]]:
+            lst[
+                index[r]+1:
+                int(index[r+1])-1
+            ]
+        }
+    )
