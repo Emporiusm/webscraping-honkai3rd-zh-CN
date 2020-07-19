@@ -16,7 +16,6 @@ import numpy as np
 import pprint
 
 
-
 # %%
 pages       = range(1,2)
 url_part    = 'https://3rdguide.com/web/valk/detail?id='
@@ -37,26 +36,35 @@ def loadweb(urls):
     return souplist
     
 #%%
+pp = pprint.PrettyPrinter()
 soup = loadweb(urls)
 
 #%%
 categories = [category.get_text() for category in soup[0].findAll('p',class_='item1')]
-
+pp.pprint(categories)
+print(len(categories))
 #%%
 skname1 = [category.get_text() for category in soup[0].findAll('p',class_='item2')]
-print(skname1)
+pp.pprint(skname1)
+print(len(skname1))
 
 #%%
-skdesc1 = [category.get_text() for category in soup[0].findAll('p',class_='msg')]
+string1 = str()
+skdesc1 = [string1 + category.get_text() for category in soup[0].findAll('p',class_='msg')]
 pp.pprint(skdesc1)
+print(len(skdesc1))
+#%%
+skname2 = [category.get_text() for category in soup[0].findAll('p',class_='item1_1')]
+pp.pprint(skname2)
+print(len(skname2))
 
 #%%
-skname1_1 = [category.get_text() for category in soup[0].findAll('div',class_='item3')]
-pp.pprint(skname1_1)
-print(len(skname1_1))
+string2 = str()
+skdesc2 = [string2 + category.get_text() for category in soup[0].findAll('div',class_='item3')][1:-4]
+pp.pprint(skdesc2)
+print(len(skdesc2))
 
 #%%
-
 for string in soup[0].stripped_strings:
     lst.append(string)
 
