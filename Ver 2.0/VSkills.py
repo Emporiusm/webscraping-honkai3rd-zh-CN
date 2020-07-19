@@ -1,7 +1,6 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
 # -*- coding: UTF-8 -*-
-
 # %%
 from bs4 import BeautifulSoup
 import re
@@ -18,7 +17,9 @@ import pprint
 
 
 # %%
-pages       = range(1,2)
+from_page   = 1
+to_page     = 60
+pages       = range(from_page,to_page+1)
 url_part    = 'https://3rdguide.com/web/valk/detail?id='
 urls        = [url_part + str(page) for page in pages]
 souplist    = []
@@ -26,99 +27,51 @@ df_vstats   = pd.DataFrame()
 df          = pd.DataFrame()
 path        = os.path.abspath(os.getcwd())
 
-# %%
+#%%
+souplist = []
 def loadweb(urls):
-    htmls       = [urlopen(url).read() for url in urls]
-    souplist    = []
-    for html in htmls:
+    progress = from_page
+    for url in urls:
+        html = urlopen(url).read()
         soup = BeautifulSoup(html.decode('utf-8'),'html.parser')
         souplist.append(soup)
-        time.sleep(np.random.randint(2,5))
+        print(str(progress) + ' of ' + str(to_page) + ' pages loading...')
+        time.sleep(np.random.randint(1,3))
+        progress = progress + 1
     return souplist
-
-
-# %%
-def savesoup(souplist):
-    sys.setrecursionlimit(100000)
-    print('Now saving...souplist as pickle file')
-    with open ('souplist_skills.pkl','wb') as chowder:
-        pickle.dump(souplist,chowder)
-        print('Saving completed!')
-    sys.setrecursionlimit(1000)
-
-
-# %%
-def loadsoup(souplist_pkl):
-    print('Now loading souplist from pickle file...')
-    with open('souplist_skills.pkl','rb') as chowder:
-        souplist = pickle.load(chowder)
-    return souplist
-    return print('Loading completed!')
-
-
-# %%
-def soup2skills(souplist):
-    df_vskills = pd.DataFrame()
-    for soup in souplist:
-        sk      = [sk.get_text()      for sk      in soup.findAll('p',    class_='item1')     ]
-        skname  = [skname.get_text()  for skname  in soup.findAll('p',    class_='item2')     ]
-        skdesc  = [skdesc.get_text()  for skdesc  in soup.findAll('p',    class_='msg')       ]
-        sk1name = [sk1name.get_text() for sk1name in soup.findAll('p',    class_='item1_1')   ]
-        sk1desc = [sk1desc.get_text() for sk1desc in soup.findAll('p',    class_='item1_2')   ]
-        sk1stat = [sk1stat.get_text() for sk1stat in soup.findAll('div',  class_='item3')     ]
-        sk2name = [sk2name.get_text() for sk2name in soup.findAll('p',    class_='item1_1')   ]
-        sk2desc = [sk2desc.get_text() for sk2desc in soup.findAll('p',    class_='item1_2')   ]
-        sk2stat = [sk2stat.get_text() for sk2stat in soup.findAll('div',  class_='item3')     ]
-        sk3name = [sk3name.get_text() for sk3name in soup.findAll('p',    class_='item1_1')   ]
-        sk3desc = [sk3desc.get_text() for sk3desc in soup.findAll('p',    class_='item1_2')   ]
-        sk3stat = [sk3stat.get_text() for sk3stat in soup.findAll('div',  class_='item3')     ]
-        dic     = {}
-        dic.update(
-            {
-                'sk':       sk,
-                'skname':   skname,
-                'skdesc':   skdesc,
-                'sk1name':  sk1name,
-                'sk1desc':  sk1desc,
-                'sk1stat':  sk1stat,
-                'sk2name':  sk2name,
-                'sk2desc':  sk2desc,
-                'sk2stat':  sk2stat,
-                'sk3name':  sk3name,
-                'sk3desc':  sk3desc,
-                'sk3stat':  sk3stat
-            }
-        )
-        df_vskills = pd.DataFrame.from_dict(dic,orient='columns',dtype=str)
-    return df_vskills
-
-
-# %%
-def savestats(df):
-    print('Now saving dataframe to pickle file...')
-    df.to_pickle('valkyries_skills.pkl')
-    print('Dataframe saving Completed!')
-
-
-# %%
-def loadstats(Valkyrie_pkl):
-    print('Now Loading pickle file to dataframe')
-    df_vskills = pd.read_pickle("valkyries_skills.pkl")
-    print('Dataframe loading completed!')
-    return df_vskills
-
-
-# %%
-def refreshall(urls):
-    print('Refreshing Web Content...')
-    souplist = loadweb(urls)
-    soup2skills(souplist).to_excel('valkyrie_skills.xlsx')
-    savesoup(souplist)
-    savestats(df_vstats)
-    print('Task Completed!')
 
 #%%
-refreshall(urls)
+pp = pprint.PrettyPrinter()
+souplist = loadweb(urls)
 
-
-# %%
+#%%
+df = pd.DataFrame()
+from_page = 1
+page = from_page
+for soup in souplist:
+    dic = {}
+    dic.update(enumerate(soup.stripped_strings))
+    if dic.get(6) == None:
+        pass
+    else:
+        name = dic.get(6)
+        categories = [category.get_text() for category in soup.findAll('p',class_='item1')]
+        major_name = [category.get_text() for category in soup.findAll('p',class_='item2')]
+        string1 = str()
+        major_detail = [string1 + category.get_text() for category in soup.findAll('p',class_='msg')]
+        minor_name = [category.get_text() for category in soup.findAll('p',class_='item1_1')]
+        string2 = str()
+        minor_detail = [string2 + category.get_text() for category in soup.findAll('div',class_='item3')]
+        major = pd.DataFrame([major_name,major_detail],index=['技能','描述'])
+        minor = pd.DataFrame([minor_name[1:-1],minor_detail],index=['技能','描述'])
+        concat = pd.concat([major,minor],axis=1).transpose()
+        concat['女武神'] = name
+        concat['Page'] = page
+        concat['描述'] = concat['描述'].astype(str).str.strip()
+        page = page + 1
+        df = df.append(concat)
+    df = df.set_index(df['女武神'],drop=True)
+    df = df.dropna()
+#%%
+df.to_excel('valkyrie_skills.xlsx')
+df.to_pickle('valkyrie_skills.pkl')

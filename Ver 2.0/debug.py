@@ -46,7 +46,8 @@ souplist = loadweb(urls)
 
 #%%
 df = pd.DataFrame()
-
+from_page = 1
+page = from_page
 for soup in souplist:
     dic = {}
     dic.update(enumerate(soup.stripped_strings))
@@ -65,19 +66,12 @@ for soup in souplist:
         minor = pd.DataFrame([minor_name[1:-1],minor_detail],index=['技能','描述'])
         concat = pd.concat([major,minor],axis=1).transpose()
         concat['女武神'] = name
-        concat['Page'] = from_page
+        concat['Page'] = page
         concat['描述'] = concat['描述'].astype(str).str.strip()
-        from_page = from_page + 1
+        page = page + 1
         df = df.append(concat)
-    df = df.set_index('女武神')
-    df.dropna()
-
+    df = df.set_index(df['女武神'],drop=True)
+    df = df.dropna()
 #%%
 df.to_excel('valkyrie_skills.xlsx')
-
-# %%
-df
-
-#%%
-len(souplist)
-# %%
+df.to_pickle('valkyrie_skills.pkl')
