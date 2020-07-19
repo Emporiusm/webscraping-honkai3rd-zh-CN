@@ -12,10 +12,11 @@ import openpyxl
 import os
 import time
 import numpy as np
+import pprint
 
 
 # %%
-pages       = range(2)
+pages       = range(1,2)
 url_part    = 'https://3rdguide.com/web/valk/detail?id='
 urls        = [url_part + str(page) for page in pages]
 souplist    = []
