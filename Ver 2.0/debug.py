@@ -44,25 +44,25 @@ categories = [category.get_text() for category in soup[0].findAll('p',class_='it
 pp.pprint(categories)
 print(len(categories))
 #%%
-skname1 = [category.get_text() for category in soup[0].findAll('p',class_='item2')]
-pp.pprint(skname1)
-print(len(skname1))
+major_name = [category.get_text() for category in soup[0].findAll('p',class_='item2')]
+pp.pprint(major_name)
+print(len(major_name))
 
 #%%
 string1 = str()
-skdesc1 = [string1 + category.get_text() for category in soup[0].findAll('p',class_='msg')]
-pp.pprint(skdesc1)
-print(len(skdesc1))
+major_detail = [string1 + category.get_text() for category in soup[0].findAll('p',class_='msg')]
+pp.pprint(major_detail)
+print(len(major_detail))
 #%%
-skname2 = [category.get_text() for category in soup[0].findAll('p',class_='item1_1')]
-pp.pprint(skname2)
-print(len(skname2))
+minor_name = [category.get_text() for category in soup[0].findAll('p',class_='item1_1')]
+pp.pprint(minor_name)
+print(len(minor_name))
 
 #%%
 string2 = str()
-skdesc2 = [string2 + category.get_text() for category in soup[0].findAll('div',class_='item3')][1:-4]
-pp.pprint(skdesc2)
-print(len(skdesc2))
+minor_detail = [string2 + category.get_text() for category in soup[0].findAll('div',class_='item3')]
+pp.pprint(minor_detail)
+print(len(minor_detail))
 
 #%%
 for string in soup[0].stripped_strings:
