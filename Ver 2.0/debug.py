@@ -29,12 +29,15 @@ path        = os.path.abspath(os.getcwd())
 
 #%%
 def loadweb(urls):
-    htmls       = [urlopen(url).read() for url in urls]
-    souplist    = []
-    for html in htmls:
+    progress = from_page
+    for url in urls:
+        html = urlopen(url).read()
         soup = BeautifulSoup(html.decode('utf-8'),'html.parser')
+        souplist    = []
         souplist.append(soup)
-        time.sleep(np.random.randint(2,5))
+        print(str(progress) + ' of ' + str(to_page) + ' pages loading...')
+        time.sleep(np.random.randint(1,3))
+        progress = progress + 1
     enumerate(souplist,start=from_page)
     return souplist
 
@@ -65,6 +68,10 @@ for soup in souplist:
 df = df.set_index('女武神')
 
 #%%
+df.to_excel('valkyrie_skills.xlsx')
+
+# %%
 df
+
 
 # %%
