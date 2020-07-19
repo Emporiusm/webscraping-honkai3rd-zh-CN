@@ -40,16 +40,28 @@ def loadweb(urls):
 soup = loadweb(urls)
 
 #%%
-category = soup[0].findAll('p',class_='item1')
-cats = []
-for cat in category:
-    text = cat.get_text()
-    cats.append(text)
-lst = []
+categories = [category.get_text() for category in soup[0].findAll('p',class_='item1')]
+
+#%%
+skname1 = [category.get_text() for category in soup[0].findAll('p',class_='item2')]
+print(skname1)
+
+#%%
+skdesc1 = [category.get_text() for category in soup[0].findAll('p',class_='msg')]
+pp.pprint(skdesc1)
+
+#%%
+skname1_1 = [category.get_text() for category in soup[0].findAll('div',class_='item3')]
+pp.pprint(skname1_1)
+print(len(skname1_1))
+
+#%%
+
 for string in soup[0].stripped_strings:
     lst.append(string)
 
 #%%
+skills = [skill.get_text() for skill in soup[0].findAll('p',class_='item2')]
 index = []
 print(cats)
 for cat in cats:
@@ -70,3 +82,14 @@ for r in range(0,5):
             ]
         }
     )
+
+#%%
+
+
+# %%
+duc
+
+# %%
+dic
+
+# %%
