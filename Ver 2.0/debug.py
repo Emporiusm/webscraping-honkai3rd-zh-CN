@@ -17,19 +17,16 @@ import pprint
 
 
 # %%
-from_page   = 1
-to_page     = 60
+from_page   = input('Input the start_page in the range of webpages to parse for the html file')
+to_page     = input('Input the end_page in the range of webpages to parse for the html file')
 pages       = range(from_page,to_page+1)
 url_part    = 'https://3rdguide.com/web/valk/detail?id='
 urls        = [url_part + str(page) for page in pages]
-souplist    = []
-df_vstats   = pd.DataFrame()
-df          = pd.DataFrame()
 path        = os.path.abspath(os.getcwd())
 
 #%%
 souplist = []
-def loadweb(urls):
+def parsepages(urls):
     progress = from_page
     for url in urls:
         html = urlopen(url).read()
@@ -42,7 +39,7 @@ def loadweb(urls):
 
 #%%
 pp = pprint.PrettyPrinter()
-souplist = loadweb(urls)
+souplist = parsepages(urls)
 
 #%%
 df = pd.DataFrame()
